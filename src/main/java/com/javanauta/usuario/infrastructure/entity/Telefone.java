@@ -1,4 +1,4 @@
-package com.javanauta.aprendendospring.infrastructure.entity;
+package com.javanauta.usuario.infrastructure.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
