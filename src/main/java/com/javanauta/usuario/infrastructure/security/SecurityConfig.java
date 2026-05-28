@@ -37,25 +37,22 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
 
-                        // libera login
+                .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/usuario/login").permitAll()
-
-                        // libera cadastro
                         .requestMatchers(HttpMethod.POST, "/usuario").permitAll()
 
-                        // 🔥 LIBERA GET /usuario (SEU CASO DO POSTMAN)
-                        .requestMatchers(HttpMethod.GET, "/usuario").permitAll()
-
-                        // qualquer outro /usuario precisa de autenticação
+                        // tudo protegido
                         .requestMatchers("/usuario/**").authenticated()
 
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
