@@ -37,7 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             token = header.substring(7);
 
             try {
-                username = jwtUtil.extractUsername(token);
+                username = jwtUtil.extrairEmailToken(token);
             } catch (Exception e) {
                 filterChain.doFilter(request, response);
                 return;

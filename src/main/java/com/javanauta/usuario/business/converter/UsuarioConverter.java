@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 public class UsuarioConverter {
 
-
     public Usuario paraUsuario(UsuarioDTO usuarioDTO) {
         return Usuario.builder()
                 .nome(usuarioDTO.getNome())
@@ -40,7 +39,6 @@ public class UsuarioConverter {
                 .cep(enderecoDTO.getCep())
                 .build();
     }
-
 
     public List<Telefone> paraListaTelefones(List<TelefoneDTO> telefoneDTO) {
         return telefoneDTO.stream()
@@ -82,7 +80,6 @@ public class UsuarioConverter {
                 .build();
     }
 
-
     public List<TelefoneDTO> paraListaTelefonesDTO(List<Telefone> telefone) {
         return telefone.stream()
                 .map(this::paraTelefoneDTO)
@@ -93,6 +90,17 @@ public class UsuarioConverter {
         return TelefoneDTO.builder()
                 .ddd(telefone.getDdd())
                 .numero(telefone.getNumero())
+                .build();
+    }
+
+    public Usuario updateDeUsuario(UsuarioDTO usuarioDTO, Usuario entity) {
+        return Usuario.builder()
+                .nome(usuarioDTO.getNome() != null ? usuarioDTO.getNome() : entity.getNome())
+                .id(entity.getId())
+                .senha(usuarioDTO.getSenha() != null ? usuarioDTO.getSenha() : entity.getSenha())
+                .email(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : entity.getEmail())
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
                 .build();
     }
 }
