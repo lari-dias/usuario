@@ -33,17 +33,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
+        // 1. Extrai token
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
 
             try {
                 username = jwtUtil.extrairEmailToken(token);
             } catch (Exception e) {
-                filterChain.doFilter(request, response);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         }
 
+        // 2. Autentica usuário no contexto
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -58,9 +60,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
 
+        // 3. Continua fluxo
         filterChain.doFilter(request, response);
     }
 }
