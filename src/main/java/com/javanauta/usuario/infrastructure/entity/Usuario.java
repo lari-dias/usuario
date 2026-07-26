@@ -24,10 +24,10 @@ public class Usuario implements UserDetails {
     @Column(name = "nome", length = 100)
     private String nome;
 
-    @Column(name = "email", length = 100, unique = true)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "senha")
+    @Column(name = "senha", nullable = false)
     private String senha;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
