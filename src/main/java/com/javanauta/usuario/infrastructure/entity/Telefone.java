@@ -3,14 +3,13 @@ package com.javanauta.usuario.infrastructure.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "telefone")
+@Getter
+@Setter
 @Builder
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class Telefone {
 
     @Id

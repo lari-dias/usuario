@@ -18,15 +18,9 @@ public class UsuarioConverter {
                 .nome(usuarioDTO.getNome())
                 .email(usuarioDTO.getEmail())
                 .senha(usuarioDTO.getSenha())
-                .enderecos(paraListaEndereco(usuarioDTO.getEnderecos()))
+                .enderecos(paraListaEnderecos(usuarioDTO.getEnderecos()))
                 .telefones(paraListaTelefones(usuarioDTO.getTelefones()))
                 .build();
-    }
-
-    public List<Endereco> paraListaEndereco(List<EnderecoDTO> enderecoDTO) {
-        return enderecoDTO.stream()
-                .map(this::paraEndereco)
-                .toList();
     }
 
     public Endereco paraEndereco(EnderecoDTO enderecoDTO) {
@@ -40,12 +34,6 @@ public class UsuarioConverter {
                 .build();
     }
 
-    public List<Telefone> paraListaTelefones(List<TelefoneDTO> telefoneDTO) {
-        return telefoneDTO.stream()
-                .map(this::paraTelefone)
-                .toList();
-    }
-
     public Telefone paraTelefone(TelefoneDTO telefoneDTO) {
         return Telefone.builder()
                 .ddd(telefoneDTO.getDdd())
@@ -53,20 +41,34 @@ public class UsuarioConverter {
                 .build();
     }
 
+    public List<Endereco> paraListaEnderecos(List<EnderecoDTO> enderecosDTO) {
+        if (enderecosDTO == null) {
+            return List.of();
+        }
+
+        return enderecosDTO.stream()
+                .map(this::paraEndereco)
+                .toList();
+    }
+
+    public List<Telefone> paraListaTelefones(List<TelefoneDTO> telefonesDTO) {
+        if (telefonesDTO == null) {
+            return List.of();
+        }
+
+        return telefonesDTO.stream()
+                .map(this::paraTelefone)
+                .toList();
+    }
+
     public UsuarioDTO paraUsuarioDTO(Usuario usuario) {
         return UsuarioDTO.builder()
                 .nome(usuario.getNome())
                 .email(usuario.getEmail())
                 .senha(usuario.getSenha())
-                .enderecos(paraListaEnderecoDTO(usuario.getEnderecos()))
+                .enderecos(paraListaEnderecosDTO(usuario.getEnderecos()))
                 .telefones(paraListaTelefonesDTO(usuario.getTelefones()))
                 .build();
-    }
-
-    public List<EnderecoDTO> paraListaEnderecoDTO(List<Endereco> endereco) {
-        return endereco.stream()
-                .map(this::paraEnderecoDTO)
-                .toList();
     }
 
     public EnderecoDTO paraEnderecoDTO(Endereco endereco) {
@@ -81,12 +83,6 @@ public class UsuarioConverter {
                 .build();
     }
 
-    public List<TelefoneDTO> paraListaTelefonesDTO(List<Telefone> telefone) {
-        return telefone.stream()
-                .map(this::paraTelefoneDTO)
-                .toList();
-    }
-
     public TelefoneDTO paraTelefoneDTO(Telefone telefone) {
         return TelefoneDTO.builder()
                 .id(telefone.getId())
@@ -95,33 +91,58 @@ public class UsuarioConverter {
                 .build();
     }
 
-    public Usuario updateDeUsuario(UsuarioDTO usuarioDTO, Usuario entity) {
-        return Usuario.builder()
-                .nome(usuarioDTO.getNome() != null ? usuarioDTO.getNome() : entity.getNome())
-                .id(entity.getId())
-                .senha(usuarioDTO.getSenha() != null ? usuarioDTO.getSenha() : entity.getSenha())
-                .email(usuarioDTO.getEmail() != null ? usuarioDTO.getEmail() : entity.getEmail())
-                .enderecos(entity.getEnderecos())
-                .telefones(entity.getTelefones())
-                .build();
+    public List<EnderecoDTO> paraListaEnderecosDTO(List<Endereco> enderecos) {
+        if (enderecos == null) {
+            return List.of();
+        }
+
+        return enderecos.stream()
+                .map(this::paraEnderecoDTO)
+                .toList();
     }
-    public Endereco updateEndereco(EnderecoDTO dto, Endereco entity) {
-        return Endereco.builder()
-                .id(entity.getId())
-                .rua(dto.getRua() != null ? dto.getRua() : entity.getRua())
-                .numero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero())
-                .complemento(dto.getComplemento() != null ? dto.getComplemento() : entity.getComplemento())
-                .cidade(dto.getCidade() != null ? dto.getCidade() : entity.getCidade())
-                .estado(dto.getEstado() != null ? dto.getEstado() : entity.getEstado())
-                .cep(dto.getCep() != null ? dto.getCep() : entity.getCep())
+
+    public List<TelefoneDTO> paraListaTelefonesDTO(List<Telefone> telefones) {
+        if (telefones == null) {
+            return List.of();
+        }
+
+        return telefones.stream()
+                .map(this::paraTelefoneDTO)
+                .toList();
+    }
+
+    public Usuario atualizarUsuario(UsuarioDTO usuarioDTO, Usuario usuario) {
+        return Usuario.builder()
+                .id(usuario.getId())
+                .nome(valorOuAtual(usuarioDTO.getNome(), usuario.getNome()))
+                .email(valorOuAtual(usuarioDTO.getEmail(), usuario.getEmail()))
+                .senha(valorOuAtual(usuarioDTO.getSenha(), usuario.getSenha()))
+                .enderecos(usuario.getEnderecos())
+                .telefones(usuario.getTelefones())
                 .build();
     }
 
-    public Telefone updateTelefone(TelefoneDTO dto, Telefone entity) {
-        return Telefone.builder()
-                .id(entity.getId())
-                .ddd(dto.getDdd() != null ? dto.getDdd() : entity.getDdd())
-                .numero(dto.getNumero() != null ? dto.getNumero() : entity.getNumero())
+    public Endereco atualizarEndereco(EnderecoDTO enderecoDTO, Endereco endereco) {
+        return Endereco.builder()
+                .id(endereco.getId())
+                .rua(valorOuAtual(enderecoDTO.getRua(), endereco.getRua()))
+                .numero(valorOuAtual(enderecoDTO.getNumero(), endereco.getNumero()))
+                .complemento(valorOuAtual(enderecoDTO.getComplemento(), endereco.getComplemento()))
+                .cidade(valorOuAtual(enderecoDTO.getCidade(), endereco.getCidade()))
+                .estado(valorOuAtual(enderecoDTO.getEstado(), endereco.getEstado()))
+                .cep(valorOuAtual(enderecoDTO.getCep(), endereco.getCep()))
                 .build();
+    }
+
+    public Telefone atualizarTelefone(TelefoneDTO telefoneDTO, Telefone telefone) {
+        return Telefone.builder()
+                .id(telefone.getId())
+                .ddd(valorOuAtual(telefoneDTO.getDdd(), telefone.getDdd()))
+                .numero(valorOuAtual(telefoneDTO.getNumero(), telefone.getNumero()))
+                .build();
+    }
+
+    private <T> T valorOuAtual(T novoValor, T valorAtual) {
+        return novoValor != null ? novoValor : valorAtual;
     }
 }

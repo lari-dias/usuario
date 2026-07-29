@@ -6,9 +6,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioDTO {
 
     private String nome;
@@ -16,5 +16,4 @@ public class UsuarioDTO {
     private String senha;
     private List<EnderecoDTO> enderecos;
     private List<TelefoneDTO> telefones;
-
 }
