@@ -12,7 +12,6 @@ API REST desenvolvida em **Java com Spring Boot** para gerenciamento de usuário
 * JWT (JSON Web Token)
 * PostgreSQL
 * Lombok
-* Gradle
 * Docker
 
 ## 📌 Funcionalidades
