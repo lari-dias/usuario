@@ -13,6 +13,7 @@ API REST desenvolvida em **Java com Spring Boot** para gerenciamento de usuário
 * PostgreSQL
 * Lombok
 * Docker
+* Gradle
 
 ## 📌 Funcionalidades
 
